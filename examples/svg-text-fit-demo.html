@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SVG text-fit rules — smoke test</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #555;
+    --line: #d4d4d4;
+    --bg: #fafafa;
+    --card: #ffffff;
+    --accent: #b04a2c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font: 14px/1.5 ui-serif, Georgia, serif;
+    max-width: 920px;
+    margin: 40px auto;
+    padding: 0 24px;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  h1 {
+    font: 600 22px/1.2 system-ui, sans-serif;
+    margin: 0 0 4px;
+  }
+  .sub {
+    font: 14px/1.5 system-ui, sans-serif;
+    color: var(--muted);
+    margin: 0 0 32px;
+  }
+  h2 {
+    font: 600 16px/1.3 system-ui, sans-serif;
+    margin: 32px 0 12px;
+    color: var(--ink);
+  }
+  svg {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: block;
+    margin: 16px 0 8px;
+    width: 100%;
+    max-width: 860px;
+    height: auto;
+  }
+  .caption {
+    font: italic 13px/1.4 ui-serif, Georgia, serif;
+    color: var(--muted);
+    margin: 4px 0 24px;
+  }
+  ul.notes {
+    font: 14px/1.55 ui-serif, Georgia, serif;
+    padding-left: 22px;
+  }
+  ul.notes li { margin-bottom: 8px; }
+  code {
+    font: 12.5px/1.4 ui-monospace, "SF Mono", Menlo, monospace;
+    background: #f0ece5;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font: 12px/1.5 system-ui, sans-serif;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<h1>SVG text-fit rules — smoke test</h1>
+<p class="sub">Demonstrates the html-svg-diagrams rules: <code>&lt;foreignObject&gt;</code> for variable labels, plain <code>&lt;text&gt;</code> only for short fixed-length, edge labels with backing rects, ≥40px node spacing, ≥8px shape padding.</p>
+
+<h2>1. Request flow with mixed label lengths</h2>
+
+<svg viewBox="0 0 860 280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a"/>
+    </marker>
+  </defs>
+
+  <!-- Short fixed-length label: plain <text>, box sized from label.
+       "Client" = 6 chars × ~8px + 32px padding = ~80px; box is 110px (generous). -->
+  <g transform="translate(30, 110)">
+    <rect width="110" height="64" rx="8" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+    <text x="55" y="38" text-anchor="middle"
+          font-family="system-ui, sans-serif" font-size="15" fill="#1a1a1a">Client</text>
+  </g>
+
+  <!-- Variable / multi-line label: <foreignObject> with HTML inside.
+       Real wrapping, real padding, real centering — no measurement guesswork. -->
+  <g transform="translate(210, 80)">
+    <rect width="240" height="124" rx="8" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+    <foreignObject x="0" y="0" width="240" height="124">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="
+        width:100%; height:100%; padding:12px 16px; box-sizing:border-box;
+        display:flex; flex-direction:column; justify-content:center; align-items:center;
+        font:15px/1.35 system-ui, sans-serif; color:#1a1a1a; text-align:center;
+        word-wrap:break-word; overflow-wrap:anywhere;">
+        <div style="font-weight:600; margin-bottom:6px;">API Gateway</div>
+        <div style="font-size:12.5px; color:#555;">Authentication &amp; Authorization Service</div>
+      </div>
+    </foreignObject>
+  </g>
+
+  <!-- Another variable label: shows wrapping behavior with a slightly different shape. -->
+  <g transform="translate(520, 80)">
+    <rect width="220" height="124" rx="8" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+    <foreignObject x="0" y="0" width="220" height="124">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="
+        width:100%; height:100%; padding:12px 16px; box-sizing:border-box;
+        display:flex; flex-direction:column; justify-content:center; align-items:center;
+        font:15px/1.35 system-ui, sans-serif; color:#1a1a1a; text-align:center;
+        word-wrap:break-word; overflow-wrap:anywhere;">
+        <div style="font-weight:600; margin-bottom:6px;">User Service</div>
+        <div style="font-size:12.5px; color:#555;">Profile read/write, preferences, account lifecycle</div>
+      </div>
+    </foreignObject>
+  </g>
+
+  <!-- Edge 1: Client → Gateway. Note backing rect under the label. -->
+  <path d="M140 142 L210 142" stroke="#1a1a1a" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="150" y="126" width="50" height="20" rx="3" fill="#fff"/>
+  <text x="175" y="140" text-anchor="middle"
+        font-family="system-ui, sans-serif" font-size="11.5" fill="#555">HTTPS</text>
+
+  <!-- Edge 2: Gateway → User Service. Backing rect on label. -->
+  <path d="M450 142 L520 142" stroke="#1a1a1a" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="458" y="126" width="64" height="20" rx="3" fill="#fff"/>
+  <text x="490" y="140" text-anchor="middle"
+        font-family="system-ui, sans-serif" font-size="11.5" fill="#555">RPC + JWT</text>
+</svg>
+<p class="caption">Three nodes, two edges. "Client" is fixed-length → plain <code>&lt;text&gt;</code>. "API Gateway / Authentication &amp; Authorization Service" and "User Service / Profile read/write, preferences, account lifecycle" are variable / multi-line → <code>&lt;foreignObject&gt;</code>. Edge labels sit on small white rects so they stay readable if a path ever crosses them.</p>
+
+<h2>2. State machine with longer state names</h2>
+
+<svg viewBox="0 0 860 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a"/>
+    </marker>
+  </defs>
+
+  <!-- pending -->
+  <g transform="translate(30, 100)">
+    <rect width="160" height="80" rx="40" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+    <foreignObject x="0" y="0" width="160" height="80">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="
+        width:100%; height:100%; padding:10px 16px; box-sizing:border-box;
+        display:flex; align-items:center; justify-content:center;
+        font:15px/1.3 system-ui, sans-serif; color:#1a1a1a; text-align:center;
+        font-weight:600;">Pending review</div>
+    </foreignObject>
+  </g>
+
+  <!-- in flight -->
+  <g transform="translate(260, 100)">
+    <rect width="190" height="80" rx="40" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+    <foreignObject x="0" y="0" width="190" height="80">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="
+        width:100%; height:100%; padding:10px 16px; box-sizing:border-box;
+        display:flex; align-items:center; justify-content:center;
+        font:15px/1.3 system-ui, sans-serif; color:#1a1a1a; text-align:center;
+        font-weight:600;">Approval in flight</div>
+    </foreignObject>
+  </g>
+
+  <!-- accepted -->
+  <g transform="translate(520, 30)">
+    <rect width="160" height="80" rx="40" fill="#f0f6ef" stroke="#3a6b3a" stroke-width="1.5"/>
+    <foreignObject x="0" y="0" width="160" height="80">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="
+        width:100%; height:100%; padding:10px 16px; box-sizing:border-box;
+        display:flex; align-items:center; justify-content:center;
+        font:15px/1.3 system-ui, sans-serif; color:#1a3a1a; text-align:center;
+        font-weight:600;">Accepted</div>
+    </foreignObject>
+  </g>
+
+  <!-- rejected -->
+  <g transform="translate(520, 170)">
+    <rect width="160" height="80" rx="40" fill="#fbf0ef" stroke="#8a3a32" stroke-width="1.5"/>
+    <foreignObject x="0" y="0" width="160" height="80">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="
+        width:100%; height:100%; padding:10px 16px; box-sizing:border-box;
+        display:flex; align-items:center; justify-content:center;
+        font:15px/1.3 system-ui, sans-serif; color:#3a1a1a; text-align:center;
+        font-weight:600;">Rejected</div>
+    </foreignObject>
+  </g>
+
+  <!-- transitions -->
+  <path d="M190 140 L260 140" stroke="#1a1a1a" stroke-width="1.5" fill="none" marker-end="url(#arrow2)"/>
+  <rect x="195" y="124" width="60" height="20" rx="3" fill="#fff"/>
+  <text x="225" y="138" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11.5" fill="#555">submit</text>
+
+  <path d="M450 130 Q485 90 520 70" stroke="#3a6b3a" stroke-width="1.5" fill="none" marker-end="url(#arrow2)"/>
+  <rect x="450" y="80" width="78" height="20" rx="3" fill="#fff"/>
+  <text x="489" y="94" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11.5" fill="#3a6b3a">approve()</text>
+
+  <path d="M450 150 Q485 190 520 210" stroke="#8a3a32" stroke-width="1.5" fill="none" marker-end="url(#arrow2)"/>
+  <rect x="450" y="180" width="72" height="20" rx="3" fill="#fff"/>
+  <text x="486" y="194" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11.5" fill="#8a3a32">reject()</text>
+</svg>
+<p class="caption">State machine with mid-length state labels. Every state node uses <code>&lt;foreignObject&gt;</code> — the labels happen to be short, but the same pattern handles "Pending review" and an eventual "Pending senior-reviewer escalation" without code change. Edge labels (submit, approve(), reject()) have backing rects.</p>
+
+<h2>What this demonstrates</h2>
+<ul class="notes">
+  <li><strong>Short, fixed-length label → plain <code>&lt;text&gt;</code>.</strong> Box width is comfortably larger than label width × 8px + 32px padding.</li>
+  <li><strong>Variable or potentially-long label → <code>&lt;foreignObject&gt;</code> + HTML <code>&lt;div&gt;</code>.</strong> Real word wrapping, real flex centering, real padding control. The label can grow without breaking the layout.</li>
+  <li><strong>Edge labels sit on small white-fill <code>&lt;rect&gt;</code>s.</strong> If the path ever crosses another element, the label stays readable instead of merging with the line behind it.</li>
+  <li><strong>Spacing ≥ 40px between any two nodes.</strong> Client→Gateway gap is 70px; Gateway→User Service gap is 70px; vertical state-machine arcs clear all box edges.</li>
+  <li><strong>Padding ≥ 8px on every text-containing shape</strong> (used 10–16px throughout for breathing room).</li>
+</ul>
+
+<footer>
+  Generated by <code>agent-html-skills</code> · 2026-05-13 · for visual verification of the SVG text-fit rules.
+</footer>
+
+</body>
+</html>

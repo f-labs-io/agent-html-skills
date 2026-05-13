@@ -1,0 +1,21 @@
+{
+  "name": "html-skills",
+  "description": "Sixteen HTML-output skills that help Claude Code reach for self-contained HTML artifacts (specs, diagrams, dashboards, prototypes, decks, mind maps, design tokens, comparison matrices, and more) instead of long-form markdown when HTML is the better surface.",
+  "version": "1.0.0",
+  "author": {
+    "name": "f-labs-io"
+  },
+  "homepage": "https://github.com/f-labs-io/agent-html-skills",
+  "repository": "https://github.com/f-labs-io/agent-html-skills",
+  "license": "MIT",
+  "keywords": [
+    "html",
+    "skills",
+    "diagrams",
+    "specs",
+    "prototypes",
+    "design",
+    "research",
+    "visualization"
+  ]
+}

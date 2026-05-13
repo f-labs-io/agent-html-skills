@@ -1,0 +1,27 @@
+{
+  "name": "agent-html-skills",
+  "owner": {
+    "name": "f-labs-io"
+  },
+  "description": "HTML-output skills for Claude Code — 16 patterns that produce self-contained HTML artifacts instead of long-form markdown when HTML is the better surface.",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "html-skills",
+      "source": "./plugins/html-skills",
+      "description": "Sixteen HTML-output skills (specs, diagrams, dashboards, prototypes, decks, mind maps, design tokens, comparison matrices, and more).",
+      "category": "skills",
+      "tags": [
+        "html",
+        "diagrams",
+        "specs",
+        "prototypes",
+        "design",
+        "research",
+        "visualization"
+      ]
+    }
+  ]
+}
