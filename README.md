@@ -1,5 +1,7 @@
 # agent-html-skills
 
+[![skills.sh](https://skills.sh/b/f-labs-io/agent-html-skills)](https://skills.sh/f-labs-io/agent-html-skills)
+
 **Two-way HTML artifacts for Claude Code — Claude generates the page, you interact with it in your browser, and the result comes back to Claude automatically. No copy-paste.**
 
 Thariq's article ["Using Claude Code: The Unreasonable Effectiveness of HTML"](https://x.com/trq212/status/2052809885763747935) made the case for HTML as a better output surface than long-form markdown — color, layout, type, interactivity, all the things markdown gives up. This plugin runs with that idea and closes the loop: six of the sixteen skills produce *interactive* HTML (mind maps, kanban editors, brainstorm grids, comparison matrices, parameter playgrounds, design prototype tuners), and when you click Submit, your structured result is delivered back to Claude as a notification in the same session. You move on without copying anything.
@@ -10,9 +12,17 @@ Sixteen skills total. Each is a single `SKILL.md` with the aesthetic rules and s
 
 ## Install
 
+As a Claude Code plugin:
+
 ```text
 /plugin marketplace add f-labs-io/agent-html-skills
 /plugin install html-skills@agent-html-skills
+```
+
+Or via [`npx skills`](https://skills.sh) (works on Claude Code, Cursor, Codex, Gemini, and 14+ other agents):
+
+```text
+npx skills add f-labs-io/agent-html-skills
 ```
 
 ## What you get
