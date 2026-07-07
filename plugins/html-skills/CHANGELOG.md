@@ -5,6 +5,23 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [1.2.0] — 2026-07-07
 
+### Added
+
+- **New skill: `html-testing-checklist`** — thorough, interactive testing checklists
+  for verifying software changes. Test plans are organized into end-to-end flows
+  (Flow → Phase → Step) grounded in the actual diff/tickets, with pass/fail/blocked
+  step states and notes, a prominent per-step progress bar plus per-flow sub-bars,
+  filter/search and hide-resolved navigation, floating up/down nav, an "All checks"
+  appendix, and build-time syntax-highlighted code/command snippets with copy
+  buttons. A Submit button returns every step's state and notes to the agent for
+  failure triage and fixes — this is the plugin's 7th interactive skill and wires
+  into `html-skills-listen` like the others. Bug lists in issue trackers (Monday,
+  Linear, Jira, GitHub…) are first-class input: the skill renders the board's open
+  items as a two-way checklist whose rows keep ticket ids, and offers to write
+  verdicts back to the tracker after Submit (first outward write confirmed).
+  Embedded snippets pass a mandatory credential-redaction step, and every
+  source-derived value is HTML-escaped.
+
 ### Changed
 
 - Every content skill's `## HTML output foundation` block now defines a

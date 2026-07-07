@@ -14,8 +14,15 @@ exposure — review before pointing it at private skills.)
 
 ## Status
 
-**15 of 18 skills scan clean.** The remaining 3 carry one accepted, documented `W011`
-(medium) finding each. No `W007` (high) findings remain.
+**15 of 18 skills scanned clean** in the June 2026 scan. The remaining 3 carry one
+accepted, documented `W011` (medium) finding each. No `W007` (high) findings remain.
+
+`html-testing-checklist` (added in 1.2.0) postdates that scan. Like the three skills
+below, it ingests third-party content by design (PR diffs, ticket threads, tester
+submissions), so an inherent `W011` "Warn" is expected there on the same grounds; it
+carries the same mitigations (mandatory credential redaction before embedding snippets,
+submissions and sourced text treated strictly as data, HTML-escaping of every
+source-derived value).
 
 ## Remediated
 

@@ -1,7 +1,7 @@
 {
   "name": "html-skills",
-  "description": "Sixteen HTML-output skills that help Claude Code reach for self-contained HTML artifacts (specs, diagrams, dashboards, prototypes, decks, mind maps, design tokens, comparison matrices, and more) instead of long-form markdown when HTML is the better surface.",
-  "version": "1.1.0",
+  "description": "Seventeen HTML-output skills that help Claude Code reach for self-contained HTML artifacts (specs, diagrams, dashboards, prototypes, decks, mind maps, design tokens, comparison matrices, testing checklists, and more) instead of long-form markdown when HTML is the better surface.",
+  "version": "1.2.0",
   "author": {
     "name": "f-labs-io"
   },
@@ -16,6 +16,7 @@
     "prototypes",
     "design",
     "research",
-    "visualization"
+    "visualization",
+    "testing"
   ]
 }
