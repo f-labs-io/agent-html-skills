@@ -3,6 +3,41 @@
 All notable changes to the `html-skills` plugin are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] — 2026-07-07
+
+### Added
+
+- **New skill: `html-testing-checklist`** — thorough, interactive testing checklists
+  for verifying software changes. Test plans are organized into end-to-end flows
+  (Flow → Phase → Step) grounded in the actual diff/tickets, with pass/fail/blocked
+  step states and notes, a prominent per-step progress bar plus per-flow sub-bars,
+  filter/search and hide-resolved navigation, floating up/down nav, an "All checks"
+  appendix, and build-time syntax-highlighted code/command snippets with copy
+  buttons. A Submit button returns every step's state and notes to the agent for
+  failure triage and fixes — this is the plugin's 7th interactive skill and wires
+  into `html-skills-listen` like the others. Bug lists in issue trackers (Monday,
+  Linear, Jira, GitHub…) are first-class input: the skill renders the board's open
+  items as a two-way checklist whose rows keep ticket ids, and offers to write
+  verdicts back to the tracker after Submit (first outward write confirmed).
+  Embedded snippets pass a mandatory credential-redaction step, and every
+  source-derived value is HTML-escaped.
+
+### Changed
+
+- Every content skill's `## HTML output foundation` block now defines a
+  **"Publish to Claude.ai" button** pattern. Local HTML with immediate two-way
+  comms back to Claude Code stays the hard default surface; when the harness
+  exposes the `Artifact` tool, the artifact carries a small secondary button that
+  asks Claude Code — through the same `html-skills-listen` round-trip channel,
+  with the natural clipboard fallback — to publish the page as a hosted artifact
+  (standard envelope, `kind: "publish-request"`) and report the shareable link in
+  chat. Guardrails: a publish request is honored only for files the agent
+  generated this session; the published copy has the injected
+  `window.__CLAUDE_SUBMIT_URL__` line and the button itself stripped (both are
+  dead weight on a hosted page, and the local session handshake never travels
+  off-machine); artifacts carrying masked secrets or private data never render
+  the button and are never published.
+
 ## [1.1.0] — 2026-06-16
 
 ### Security

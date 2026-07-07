@@ -1,6 +1,6 @@
 # html-skills
 
-Sixteen Claude Code skills for HTML-output patterns — derived from Thariq's article ["Using Claude Code: The Unreasonable Effectiveness of HTML"](https://x.com/trq212/status/2052809885763747935).
+Seventeen Claude Code skills for HTML-output patterns — derived from Thariq's article ["Using Claude Code: The Unreasonable Effectiveness of HTML"](https://x.com/trq212/status/2052809885763747935).
 
 ## What's in here
 
@@ -22,6 +22,7 @@ Sixteen Claude Code skills for HTML-output patterns — derived from Thariq's ar
 | 14 | `html-timeline-roadmap` | Gantt/roadmap/timeline views |
 | 15 | `html-erd-explorer` | Database schema visualizations |
 | 16 | `html-mind-map` | Branching concept maps with export |
+| 17 | `html-testing-checklist` | Flow-organized testing checklists that send pass/fail results back |
 
 ## Design notes
 
@@ -32,7 +33,7 @@ Sixteen Claude Code skills for HTML-output patterns — derived from Thariq's ar
 
 ## Submit pipeline for interactive artifacts
 
-Six skills produce artifacts the user submits back: `html-throwaway-editor`, `html-mind-map`, `html-brainstorm-grid`, `html-comparison-matrix`, `html-interactive-playground`, `html-design-prototypes`. Each of those `SKILL.md` files ends with a `## Submit pipeline (server or clipboard)` block describing the contract.
+Seven skills produce artifacts the user submits back: `html-throwaway-editor`, `html-mind-map`, `html-brainstorm-grid`, `html-comparison-matrix`, `html-interactive-playground`, `html-design-prototypes`, `html-testing-checklist`. Each of those `SKILL.md` files ends with a `## Submit pipeline (server or clipboard)` block describing the contract.
 
 ### Two modes
 
@@ -83,6 +84,8 @@ Both modes carry the same JSON, so a result-handling agent can be skill-agnostic
 ```
 
 `data` is whatever the skill's existing export already produces. The other fields are routing.
+
+One additional standard kind is shared by every content skill: `kind: "publish-request"`, emitted by the "Publish to Claude.ai" button (see the foundation block's last bullet). Its `data.file` names the artifact the user wants published via the `Artifact` tool; agents honor it only for files they generated in the current session, and publish a copy with the submit URL and the button stripped.
 
 ## Skill boundaries
 

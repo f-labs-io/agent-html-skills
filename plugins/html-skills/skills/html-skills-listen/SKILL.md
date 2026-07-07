@@ -1,7 +1,7 @@
 ---
 name: html-skills-listen
 description: >-
-  Sets up the per-session local receiver and `Monitor` for interactive html-skills artifacts so user submissions arrive as session notifications instead of as copy-paste round-trips. Other html-skills interactive skills (html-mind-map, html-throwaway-editor, html-brainstorm-grid, html-comparison-matrix, html-interactive-playground, html-design-prototypes) invoke this skill from their pre-flight block, BEFORE writing the HTML artifact. Idempotent — safe to invoke every time. Returns a localhost URL the parent skill injects as `window.__CLAUDE_SUBMIT_URL__` in the artifact. Don't invoke unprompted in unrelated conversations — this only fires when an interactive html-skills artifact is about to be produced.
+  Sets up the per-session local receiver and `Monitor` for interactive html-skills artifacts so user submissions arrive as session notifications instead of as copy-paste round-trips. Other html-skills interactive skills (html-mind-map, html-throwaway-editor, html-brainstorm-grid, html-comparison-matrix, html-interactive-playground, html-design-prototypes, html-testing-checklist) invoke this skill from their pre-flight block, BEFORE writing the HTML artifact. Idempotent — safe to invoke every time. Returns a localhost URL the parent skill injects as `window.__CLAUDE_SUBMIT_URL__` in the artifact. Don't invoke unprompted in unrelated conversations — this only fires when an interactive html-skills artifact is about to be produced.
 license: MIT
 ---
 
