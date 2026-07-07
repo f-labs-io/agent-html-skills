@@ -3,6 +3,24 @@
 All notable changes to the `html-skills` plugin are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] — 2026-07-07
+
+### Changed
+
+- Every content skill's `## HTML output foundation` block now defines a
+  **"Publish to Claude.ai" button** pattern. Local HTML with immediate two-way
+  comms back to Claude Code stays the hard default surface; when the harness
+  exposes the `Artifact` tool, the artifact carries a small secondary button that
+  asks Claude Code — through the same `html-skills-listen` round-trip channel,
+  with the natural clipboard fallback — to publish the page as a hosted artifact
+  (standard envelope, `kind: "publish-request"`) and report the shareable link in
+  chat. Guardrails: a publish request is honored only for files the agent
+  generated this session; the published copy has the injected
+  `window.__CLAUDE_SUBMIT_URL__` line and the button itself stripped (both are
+  dead weight on a hosted page, and the local session handshake never travels
+  off-machine); artifacts carrying masked secrets or private data never render
+  the button and are never published.
+
 ## [1.1.0] — 2026-06-16
 
 ### Security

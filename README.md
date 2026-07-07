@@ -55,6 +55,10 @@ For the auto-submit path to work in a local Claude Code session, run this once p
 Claude invokes the bundled **`html-skills-listen` skill** automatically before producing any interactive artifact in a local Claude Code session — you don't have to do anything. It arms a per-session local listener on an ephemeral port and a `Monitor` on its log; every Submit click then lands directly in Claude as a notification, no manual copy-paste. When you're done, Claude can invoke `html-skills-stop` to tear it down (or just end the session — the receiver dies with the shell).
 
 Skip the command and you stay on the clipboard fallback; the artifacts still work, you just paste the JSON back yourself.
+## Publishing to Claude.ai
+
+Local HTML with the immediate two-way round-trip is the hard default. On top of that, when the session's harness exposes Claude Code's `Artifact` tool, every artifact carries a small **"Publish to Claude.ai"** button: clicking it sends a `publish-request` through the same round-trip channel (with the same clipboard fallback), and Claude publishes the page as a hosted artifact and drops the shareable link in chat. The published copy is a read-out — its submit wiring and the button itself are stripped — so the local file remains where you interact.
+
 
 ## Using these skills in Claude.ai chat (not Claude Code)
 
@@ -80,7 +84,7 @@ plugins/html-skills/
 
 1. Keep the frontmatter `name` and `description`. The `description` field is "pushy" by design (per the [skill-creator authoring guide](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md)) — don't soften it.
 2. From the body, strip the `**TRIGGER: about to populate AskUserQuestion...**` prefix sentence in `html-brainstorm-grid`, `html-design-prototypes`, and `html-comparison-matrix`. That trigger is specific to Claude Code's `AskUserQuestion` tool — Claude.ai's chat surface doesn't have it as a competing comparison primitive, so the rule is noise there. Keep everything else in those skills' bodies (the actual generation guidance and the anti-patterns about visual comparison).
-3. Keep the `## HTML output foundation` block at the end unchanged.
+3. Keep the `## HTML output foundation` block at the end unchanged, except: drop the `"Publish to Claude.ai" button` bullet — it drives Claude Code's `Artifact` tool, which doesn't exist in Claude.ai chat.
 4. Keep all other body content and anti-patterns unchanged.
 
 **For the 6 interactive skills only** (`html-mind-map`, `html-throwaway-editor`, `html-brainstorm-grid`, `html-comparison-matrix`, `html-interactive-playground`, `html-design-prototypes`):
