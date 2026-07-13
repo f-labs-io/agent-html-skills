@@ -1,6 +1,8 @@
 ---
 name: html-mind-map
 description: Create branching, draggable HTML mind maps and concept maps for capturing brainstorms, mapping knowledge structures, exploring debugging hypotheses, or organizing nested ideas. Always include a Submit button (calls `submitToClaude`) to send the captured structure back to the agent for next steps. Use whenever the user wants to capture, organize, or explore branching ideas, hypotheses, knowledge structures, or any tree/graph-shaped thinking — especially when they say "brainstorm", "map out", "explore", or "what if".
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Mind Map & Concept Map

@@ -1,6 +1,8 @@
 ---
 name: html-design-tokens
 description: Showcase design tokens — color palettes, type scales, spacing systems, radius scales, shadow systems, motion tokens — as HTML pages with copy-paste CSS variable exports, contrast ratio checks, and live sample type. Use whenever the user shows or asks about a palette, theme, design system, branding colors, design tokens, or wants to document any system of values that drives visual design. Markdown literally cannot display colors; reach for this skill any time color or spatial values are involved.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Design Token Showcases

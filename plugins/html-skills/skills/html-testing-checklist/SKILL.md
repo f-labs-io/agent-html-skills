@@ -2,6 +2,8 @@
 name: html-testing-checklist
 description: Generate thorough, interactive HTML testing checklists that help developers and testers systematically verify software — a real test plan organized into end-to-end flows, with a prominent progress bar, pass/fail/blocked step states, filter and search navigation, and syntax-highlighted code and command snippets. Always ends with a Submit button (calls `submitToClaude`) so results come back to the agent for failure triage and fixes. Use whenever the user wants to test, QA, verify, or validate a change, feature, release, PR, or bug-fix batch — "help me test this", "test plan", "QA checklist", "verification checklist", "smoke-test list", "regression checklist". Bug lists in issue trackers (Monday, Linear, Jira, GitHub…) are natural input — render the open items as a two-way checklist whose rows keep ticket ids, and offer to write verdicts back to the tracker after Submit. Every embedded snippet passes a redaction step so credential-shaped values never land in the artifact.
 license: MIT
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Testing Checklist

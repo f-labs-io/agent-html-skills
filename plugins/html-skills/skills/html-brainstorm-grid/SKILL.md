@@ -2,6 +2,8 @@
 name: html-brainstorm-grid
 description: >-
   **TRIGGER: about to populate `AskUserQuestion` options with `preview:` content for any visual / UX / layout / screen / component / mockup comparison.** STOP and ask first: *"Quick inline chip comparison, or a full HTML grid you can open in the browser?"* Chips flatten color, type, density, motion, and interaction into monospace; HTML grids preserve all of it. **No carve-out for "simulate", "demo", "mock up", "quick decision", "just for now" — those name the surface, not an exception.** When user picks HTML, this skill generates side-by-side grids of N distinctly-different approaches — for the GENERATIVE phase, when candidates are NOT yet named. Use when the user signals exploration: "brainstorm", "explore options", "show me variations", "different approaches", "I'm not sure how to…", "try a few directions". GENERATE candidates, don't score known ones. If specific candidates ARE named ("compare X, Y, Z" / "should we use A or B"), hand off to html-comparison-matrix.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Brainstorm Comparison Grid

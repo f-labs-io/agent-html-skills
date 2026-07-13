@@ -1,6 +1,8 @@
 ---
 name: html-architecture-diagrams
 description: Create HTML system architecture diagrams — microservice maps, dependency graphs, deployment topologies, data ownership maps, integration diagrams. Useful during incidents, design reviews, onboarding, and capacity planning. Use whenever the user wants to visualize, document, or explain how a system fits together — across services, regions, queues, caches, databases, or organizational boundaries. Reach for this whenever the explanation would otherwise involve sentences like "service A talks to service B which writes to queue C".
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Architecture & System Diagrams

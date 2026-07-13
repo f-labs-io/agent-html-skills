@@ -1,6 +1,8 @@
 ---
 name: html-erd-explorer
 description: Generate HTML entity-relationship diagrams (ERDs) and database schema visualizations with clickable tables, relationship paths, and migration before/after views. Use whenever the user has a database schema, data model, or table structure to document, explain, migrate, or explore — even when they call it a "data model", "schema diagram", or just "the tables". Reach for this any time the conversation touches database structure with more than ~3 tables.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML ERD & Schema Explorer

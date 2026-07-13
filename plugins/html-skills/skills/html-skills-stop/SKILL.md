@@ -3,6 +3,8 @@ name: html-skills-stop
 description: >-
   Tears down server mode for html-skills for THIS Claude Code session — kills the receiver, stops the `Monitor` armed by `html-skills-listen`, and cleans up its temp files. Parallel sessions are unaffected. Invoke when the user is done with interactive html-skills artifacts ("I'm done with html-skills", "stop the listener", "end html-skills session"), OR at session end if the user mentions cleanup. Safe to invoke when nothing is active — it reports inactive and exits.
 license: MIT
+metadata:
+  version: "1.2.1"
 ---
 
 # html-skills-stop — tear down server mode

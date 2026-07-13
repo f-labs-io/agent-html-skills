@@ -3,6 +3,23 @@
 All notable changes to the `html-skills` plugin are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.1] — 2026-07-07
+
+### Changed
+
+- Added `metadata.version` (aligned with the plugin release version) to the YAML
+  frontmatter of all 19 skills, per the Agent Skills spec's optional metadata map —
+  so each SKILL.md is self-describing about the release it shipped in, including
+  when a skill is repackaged standalone (e.g. as a Claude.ai `.skill`). The plugin
+  release version in `plugins/html-skills/.claude-plugin/plugin.json` remains the
+  single source of truth that drives marketplace update delivery; keep the two in
+  sync on every release.
+- Repo tooling for the above (outside the plugin): `scripts/sync-skill-versions.py`
+  (`--check` / `--write` / `--set X.Y.Z`) keeps every skill's `metadata.version`
+  equal to the plugin version, and a new `skill-versions` CI job fails any PR where
+  a skill's version drifts, its frontmatter doesn't parse, or a description exceeds
+  the 1024-character limit.
+
 ## [1.2.0] — 2026-07-07
 
 ### Added

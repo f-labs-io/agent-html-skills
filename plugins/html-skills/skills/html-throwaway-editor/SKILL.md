@@ -1,6 +1,8 @@
 ---
 name: html-throwaway-editor
 description: Build single-purpose, throwaway HTML editors for one specific piece of data — drag-and-drop boards, form-based config editors, side-by-side prompt tuners, dataset curators, annotation tools. Always end with a Submit button (calls `submitToClaude`) so the result can be sent back to the agent. Use whenever the user wants to triage, reorder, edit, annotate, curate, prioritize, or pick values where typing prose would be tedious — Linear tickets, feature flags, prompts, datasets, transcripts, anything. Secret values (API keys, tokens, passwords) are never embedded verbatim — they are masked to references; the artifact and submit payload carry key names and masked previews only.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Throwaway Editor

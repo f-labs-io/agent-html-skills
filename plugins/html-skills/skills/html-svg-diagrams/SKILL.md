@@ -1,6 +1,8 @@
 ---
 name: html-svg-diagrams
 description: Create SVG-based technical diagrams inside HTML — flowcharts, sequence diagrams, state machines, data-flow diagrams, dependency graphs, request/response timelines. Use whenever the user wants to visualize, illustrate, diagram, or sketch a technical concept, system, or process. Strongly prefer SVG over ASCII art, mermaid blocks, or markdown text for anything spatial or relational. Reach for this whenever an explanation involves arrows, boxes, layers, or sequencing — even when the user doesn't say "diagram".
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML SVG Diagrams & Flowcharts

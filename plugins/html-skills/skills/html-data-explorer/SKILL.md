@@ -1,6 +1,8 @@
 ---
 name: html-data-explorer
 description: Build HTML data explorers for CSV, JSON, log, and event data — filterable tables, faceted search, inline charts, timeline scrubbing, A/B test result dashboards. Use whenever the user has a dataset to explore, browse, filter, chart, facet, or analyze — especially for ad-hoc analysis where opening a heavy BI tool is overkill. Reach for this when the user pastes data, mentions a CSV/JSON/log file, or asks to "look at" or "analyze" a dataset. Always runs a secret-redaction pass before embedding data — credential-shaped values (API keys, tokens, cookies, passwords) are replaced with placeholders unless the user explicitly opts in to embedding them.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Data Explorer
