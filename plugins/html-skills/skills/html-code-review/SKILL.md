@@ -1,6 +1,8 @@
 ---
 name: html-code-review
 description: Generate HTML artifacts for code review, PR explanation, and codebase understanding — rendered diffs with inline annotations, severity-coded findings, refactor risk maps, before/after migration views, and subsystem walkthroughs. Use whenever the user wants to review, explain, or understand a PR, refactor, codebase area, or subsystem — especially before merging, when onboarding others to a change, or when the GitHub diff view doesn't show enough context. Default to attaching an HTML explainer to every non-trivial PR.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Code Review & Understanding

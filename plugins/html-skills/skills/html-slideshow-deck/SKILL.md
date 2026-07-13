@@ -1,6 +1,8 @@
 ---
 name: html-slideshow-deck
 description: Generate keyboard-navigable HTML slideshow decks for presentations, tech talks, leadership briefings, onboarding walkthroughs, and any sequential visual narrative. Use whenever the user wants slides, a deck, a presentation, a tech talk, a brown-bag, a briefing, or any sequential walkthrough — especially when they want to share via a link rather than as a PowerPoint or Keynote file. Prefer HTML over .pptx whenever the deck contains live code, embedded interactivity, or will be shared as a URL.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Slideshow Decks

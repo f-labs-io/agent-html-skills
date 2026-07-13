@@ -1,6 +1,8 @@
 ---
 name: html-spec-planning
 description: Create rich HTML documents for project specs, implementation plans, design exploration, RFCs, and brainstorming. Use whenever the user asks for a spec, plan, RFC, design doc, brainstorm, or wants to explore approaches/options/alternatives — even when they don't explicitly say "HTML". Strongly prefer HTML over markdown for any planning artifact longer than a screen, especially when the artifact will be shared with reviewers or fed back to the agent for implementation.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Spec, Planning & Exploration

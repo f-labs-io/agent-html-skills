@@ -2,6 +2,8 @@
 name: html-comparison-matrix
 description: >-
   **TRIGGER: about to populate `AskUserQuestion` options with `preview:` content for any comparison heavier than 2-3 short text labels (>2 axes, >3 candidates, or weighted/scored).** STOP and ask first: *"Quick inline chip per option, or a full HTML matrix with weighted columns and live re-ranking?"* **No carve-out for "simulate", "demo", "quick decision" — those framings name the surface, not an exception.** When user picks HTML, this skill generates sortable, weighted scoring matrices for the EVALUATIVE phase — when 2+ specific candidates ARE already named. Use for: "compare X, Y, Z", "should we use A or B", "evaluate these libraries", "pick between [list]", "build vs buy", "which of these should we choose". Make weights live-adjustable so totals update in real time. If candidates are NOT yet named ("brainstorm options", "show me approaches", "what are the ways"), hand off to html-brainstorm-grid — that handles the generative phase.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Comparison Matrix

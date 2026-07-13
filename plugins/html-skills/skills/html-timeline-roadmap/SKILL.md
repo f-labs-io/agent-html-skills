@@ -1,6 +1,8 @@
 ---
 name: html-timeline-roadmap
 description: Create HTML timelines and roadmaps with status pills, dependency arrows, and milestone markers — for quarterly planning, project retrospectives, release histories, incident timelines, sprint visualizations. Use whenever the user wants to visualize a sequence of events over time, a plan, a roadmap, a release schedule, or look back at how a project unfolded. Reach for this whenever the explanation has a clear time axis, even if the user doesn't say "timeline".
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Timeline & Roadmap Views

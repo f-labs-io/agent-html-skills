@@ -2,6 +2,8 @@
 name: html-design-prototypes
 description: >-
   **TRIGGER: about to populate `AskUserQuestion` options with `preview:` content for any visual UI / screen / layout / component / animation comparison.** STOP and ask first: *"Quick inline chip comparison, or a full HTML prototype you can open in the browser?"* Chips flatten color, type, spacing, and motion into monospace; HTML prototypes are real. **No carve-out for "simulate", "demo", "mock up", "quick decision" — those name the surface, not an exception.** When user picks HTML, this skill creates prototypes for visual design, component playgrounds, animation tuning, and design system exploration — even when the final target is React, Swift, SwiftUI, Android, or another framework. Use whenever the user wants to mock, prototype, sketch, tune, or explore any UI element before production code. HTML is the fastest design-thinking surface; reach for it even for non-web targets. For N alternatives use html-brainstorm-grid; for a single tunable component use this skill.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Design & Prototypes

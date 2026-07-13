@@ -4,8 +4,15 @@ name: version-check
 # plugin version and update the changelog. Always runs (so it can be a required check);
 # only *enforces* when versionable plugin files changed.
 #
-# No repo checkout — reads the PR's changed files and the two plugin.json versions via
-# the GitHub API, so the job does no git clone and finishes in ~1s.
+# The version-bump job does no repo checkout — it reads the PR's changed files and the
+# two plugin.json versions via the GitHub API, so it finishes in ~1s.
+#
+# The skill-versions job checks out the PR head and runs
+# scripts/sync-skill-versions.py --check: every SKILL.md must carry a frontmatter
+# metadata.version equal to plugin.json's version (ecosystem sites read individual
+# skills, so per-skill versions must never drift from the release version), with valid
+# YAML frontmatter and descriptions under the 1024-char limit. Fix drift locally with:
+#   python3 scripts/sync-skill-versions.py --write
 
 on:
   pull_request:
@@ -61,3 +68,12 @@ jobs:
             exit 1
           fi
           echo "OK: version ${base_ver} -> ${head_ver} with a changelog update."
+
+  skill-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet pyyaml
+      - name: Every SKILL.md metadata.version must match plugin.json
+        run: python3 scripts/sync-skill-versions.py --check

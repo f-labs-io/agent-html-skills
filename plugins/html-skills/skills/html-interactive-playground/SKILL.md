@@ -1,6 +1,8 @@
 ---
 name: html-interactive-playground
 description: Create HTML playgrounds with sliders, knobs, toggles, and live preview for tuning algorithm parameters, animation values, design tokens, layout dimensions, or any value that's painful to express in text. Always include a Submit button (calls `submitToClaude`) so chosen values can be sent back to Claude Code. Use whenever the user wants to experiment with values, fine-tune behaviors, explore a parameter space, or pick from a continuous range — debounce timings, color values, easing curves, threshold values, layout dimensions, anything tunable.
+metadata:
+  version: "1.2.1"
 ---
 
 # HTML Interactive Playground
