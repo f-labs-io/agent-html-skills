@@ -14,15 +14,14 @@ exposure — review before pointing it at private skills.)
 
 ## Status
 
-**15 of 18 skills scanned clean** in the June 2026 scan. The remaining 3 carry one
-accepted, documented `W011` (medium) finding each. No `W007` (high) findings remain.
+**17 of 19 skills scan clean** on the 1.3.0 release (September 2026 scan). The remaining 2 —
+`html-research-reports` and `html-testing-checklist` — carry one accepted, inherent `W011`
+"third-party content exposure" finding each (see below). No `W007` (high) findings: the
+1.3.0 rewording (shorter descriptions, `when_to_use`, condensed shared blocks, the
+browser-storage rule) did not re-trigger the credential-handling judge.
 
-`html-testing-checklist` (added in 1.2.0) postdates that scan. Like the three skills
-below, it ingests third-party content by design (PR diffs, ticket threads, tester
-submissions), so an inherent `W011` "Warn" is expected there on the same grounds; it
-carries the same mitigations (mandatory credential redaction before embedding snippets,
-submissions and sourced text treated strictly as data, HTML-escaping of every
-source-derived value).
+For comparison, the June 2026 scan of 1.1.0 was 15 of 18 clean, with `W011` also on
+`html-code-review` and `html-skills-listen`; both are clear in the September scan.
 
 ## Remediated
 
@@ -36,28 +35,38 @@ source-derived value).
 - **W021 — Hidden Unicode.** Removed a `U+FE0F` variation selector (from a `⚙️` emoji)
   in the "Pre-flight" headings of the interactive skills.
 
-## Accepted (inherent) — W011 "Third-party content exposure" (medium, 0.85)
+## Accepted (inherent) — W011 "Third-party content exposure" (medium)
 
 | Skill | Why the finding is inherent |
 |---|---|
-| `html-research-reports` | synthesizes Slack / web / git-history (outsider-authored) into reports — that is the skill's purpose |
-| `html-code-review` | renders PR diffs / commit messages authored by others — that is the skill's purpose |
-| `html-skills-listen` | the localhost receiver forwards submission POST bodies to the agent — that is the skill's purpose |
+| `html-research-reports` | synthesizes Slack / Linear / web / git-history (outsider-authored) into reports — that is the skill's purpose |
+| `html-testing-checklist` | pulls tracker items (Monday, Linear, Jira, GitHub) and reads each ticket's body and comment thread to ground the test steps — that is the skill's purpose |
 
-These three skills ingest third-party content **by design**. `W011` flags the *capability*,
+These skills ingest third-party content **by design**. `W011` flags the *capability*,
 not a defect, and it cannot be cleared without removing what the skill does. The residual
 risk is mitigated in the skill instructions: sourced/submitted content is treated strictly
-as data (never as instructions), quoted text is rendered inert via `textContent`, and the
-agent is explicitly barred from acting on directives embedded in that content or letting
-retrieved content expand the task's scope.
+as data (never as instructions), quoted text is rendered inert via `textContent`, every
+source-derived value is HTML-escaped, embedded snippets pass a mandatory credential
+redaction, and the agent is explicitly barred from acting on directives embedded in that
+content or letting retrieved content expand the task's scope.
 
 On skills.sh this surfaces as **"Warn," not "Fail."** Rewording these findings was tested
 and found counterproductive — re-touching the data-flow wording re-triggers the `W007`
 "verbatim value" judge — so they are accepted as-is.
 
-To make a local/CI scan exit clean while keeping these documented as accepted risk:
+## In CI
+
+`.github/workflows/snyk-agent-scan.yml` runs the scan on every PR that touches the skills,
+on pushes to `main`, weekly, and on demand (`SNYK_TOKEN` repository secret). The raw JSON is
+uploaded as a workflow artifact, and `scripts/snyk-gate.py` fails the job on any finding
+not in its `ACCEPTED` list — which mirrors the table above; change the two together. A
+scan that stops reporting an accepted finding produces a warning, not a failure, so this
+file can be updated.
+
+Locally, the same gate runs as:
 
 ```bash
 SNYK_TOKEN=<your-token> uvx snyk-agent-scan@latest \
-  --skills plugins/html-skills/skills --ignore-issues-codes W011
+  --skills plugins/html-skills/skills --json > snyk-scan.json
+python3 scripts/snyk-gate.py snyk-scan.json
 ```

@@ -4,11 +4,11 @@
 
 **Two-way HTML artifacts for Claude Code — Claude generates the page, you interact with it in your browser, and the result comes back to Claude automatically. No copy-paste.**
 
-Thariq's article ["Using Claude Code: The Unreasonable Effectiveness of HTML"](https://x.com/trq212/status/2052809885763747935) made the case for HTML as a better output surface than long-form markdown — color, layout, type, interactivity, all the things markdown gives up. This plugin runs with that idea and closes the loop: seven of the seventeen skills produce *interactive* HTML (mind maps, kanban editors, brainstorm grids, comparison matrices, parameter playgrounds, design prototype tuners, testing checklists), and when you click Submit, your structured result is delivered back to Claude as a notification in the same session. You move on without copying anything.
+Thariq's article ["Using Claude Code: The Unreasonable Effectiveness of HTML"](https://x.com/trq212/status/2052809885763747935) made the case for HTML as a better output surface than long-form markdown — color, layout, type, interactivity, all the things markdown gives up. This plugin runs with that idea and closes the loop: seven of the seventeen content skills produce *interactive* HTML (mind maps, kanban editors, brainstorm grids, comparison matrices, parameter playgrounds, design prototype tuners, testing checklists), and when you click Submit, your structured result is delivered back to Claude as a notification in the same session. You move on without copying anything.
 
-The mechanism is a per-session local listener that the `html-skills-listen` skill arms automatically — the interactive skills invoke it from their pre-flight block before writing the artifact. If you skip it, or you're on Claude Code on the web, the same Submit button gracefully falls back to copying JSON to your clipboard for paste-back — so the artifacts always work, you just lose the "automatic" part of the round-trip. The other ten skills are non-interactive artifacts (specs, diagrams, dashboards, decks, design tokens, etc.) where there's no result to send back; they just produce the file.
+The mechanism is a per-session local listener that the `html-skills-listen` skill arms automatically — every content skill invokes it from its pre-flight block before writing the artifact. If you skip it, or you're on Claude Code on the web, the same Submit button gracefully falls back to copying JSON to your clipboard for paste-back — so the artifacts always work, you just lose the "automatic" part of the round-trip. The other ten skills are non-interactive artifacts (specs, diagrams, dashboards, decks, design tokens, etc.) where there's no result to send back; they just produce the file, with a small "Publish to Claude.ai" button that rides the same channel.
 
-Seventeen skills total. Each is a single `SKILL.md` with the aesthetic rules and structural guidance baked in, so the output looks deliberate rather than generic-AI.
+Seventeen content skills, plus two session primitives (`html-skills-listen`, `html-skills-stop`) that the content skills call — 19 skills in the plugin. Each is a single `SKILL.md` with the aesthetic rules and structural guidance baked in, so the output looks deliberate rather than generic-AI.
 
 ## Install
 
@@ -51,11 +51,9 @@ You don't invoke these directly — Claude will reach for the right one when the
 
 ## Enabling the auto round-trip
 
-For the auto-submit path to work in a local Claude Code session, run this once per session:
+Claude invokes the bundled **`html-skills-listen` skill** automatically before producing any artifact in a local Claude Code session — you don't have to do anything. It arms a per-session local listener on an ephemeral port and a `Monitor` on its log; every Submit click then lands directly in Claude as a notification, no manual copy-paste. When you're done, Claude can invoke `html-skills-stop` to tear it down (or just end the session — the receiver dies with the shell).
 
-Claude invokes the bundled **`html-skills-listen` skill** automatically before producing any interactive artifact in a local Claude Code session — you don't have to do anything. It arms a per-session local listener on an ephemeral port and a `Monitor` on its log; every Submit click then lands directly in Claude as a notification, no manual copy-paste. When you're done, Claude can invoke `html-skills-stop` to tear it down (or just end the session — the receiver dies with the shell).
-
-Skip the command and you stay on the clipboard fallback; the artifacts still work, you just paste the JSON back yourself.
+On Claude Code on the web, or in a sandbox that can't reach your browser, you stay on the clipboard fallback; the artifacts still work, you just paste the JSON back yourself.
 
 ## Publishing to Claude.ai
 
@@ -63,13 +61,13 @@ Local HTML with the immediate two-way round-trip is the hard default. On top of 
 
 ## Using these skills in Claude.ai chat (not Claude Code)
 
-The content of each skill — aesthetic guidance, structure rules, foundation, anti-patterns — is platform-agnostic. Only the *submit pipeline* in the seven interactive skills is Claude-Code-specific (it relies on a local server, `Monitor`, and slash commands). With that stripped out, every skill works as a regular Claude.ai skill at **Settings → Capabilities → Skills**, with HTML written to a file you save and open in your browser, and interactive results copied to your clipboard for paste-back.
+The content of each skill — aesthetic guidance, structure rules, foundation, anti-patterns — is platform-agnostic. Only the *submit pipeline* and the pre-flight are Claude-Code-specific (they rely on a local server, `Monitor`, and plugin skills). With those stripped out, every skill works as a regular Claude.ai skill at **Settings → Capabilities → Skills**, with HTML written to a file you save and open in your browser, and interactive results copied to your clipboard for paste-back.
 
 ### Asking Claude.ai's skill-creator to repackage
 
 Open a Claude.ai chat with [skill-creator](https://claude.com/plugins/skill-creator) active and paste this prompt verbatim:
 
-> Repackage the skills in `https://github.com/f-labs-io/agent-html-skills/tree/main/plugins/html-skills/skills` as individual Claude.ai skills — one `.skill` file per `SKILL.md`. Follow the **Conversion spec for skill-creator** section of that repo's top-level README exactly. Strip every Claude-Code-only mechanism (slash commands, MCP server, `Monitor`, server mode, `__CLAUDE_SUBMIT_URL__`). Keep all content guidance, aesthetic rules, the `## HTML output foundation` block, and the clipboard path of `assets/submit-handler.js`. Produce one `.skill` per skill so users can install only the ones they want.
+> Repackage the skills in `https://github.com/f-labs-io/agent-html-skills/tree/main/plugins/html-skills/skills` as individual Claude.ai skills — one `.skill` file per `SKILL.md`. Follow the **Conversion spec for skill-creator** section of that repo's top-level README exactly. Strip every Claude-Code-only mechanism (the pre-flight block, the `html-skills-listen` / `html-skills-stop` primitives, `Monitor`, server mode, `__CLAUDE_SUBMIT_URL__`). Keep all content guidance, aesthetic rules, the `## HTML output foundation` block, and the clipboard path of `assets/submit-handler.js`. Produce one `.skill` per skill so users can install only the ones they want.
 
 ### Conversion spec for skill-creator
 
@@ -77,28 +75,32 @@ Open a Claude.ai chat with [skill-creator](https://claude.com/plugins/skill-crea
 
 ```
 plugins/html-skills/
-├── skills/<skill-name>/SKILL.md      ← 17 of these, one per skill
-└── assets/submit-handler.js          ← inlined by the 7 interactive skills
+├── skills/<skill-name>/SKILL.md      ← 17 content skills + 2 session primitives (skip those)
+├── assets/submit-handler.js          ← inlined by every content skill
+└── assets/blocks/                    ← authoring templates, already expanded into each SKILL.md (skip)
 ```
 
-**For every skill (all 17):**
+**For every content skill (all 17):**
 
-1. Keep the frontmatter `name` and `description`. The `description` field is "pushy" by design (per the [skill-creator authoring guide](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md)) — don't soften it.
-2. From the body, strip the `**TRIGGER: about to populate AskUserQuestion...**` prefix sentence in `html-brainstorm-grid`, `html-design-prototypes`, and `html-comparison-matrix`. That trigger is specific to Claude Code's `AskUserQuestion` tool — Claude.ai's chat surface doesn't have it as a competing comparison primitive, so the rule is noise there. Keep everything else in those skills' bodies (the actual generation guidance and the anti-patterns about visual comparison).
-3. Keep the `## HTML output foundation` block at the end unchanged, except: drop the `"Publish to Claude.ai" button` bullet — it drives Claude Code's `Artifact` tool, which doesn't exist in Claude.ai chat.
-4. Keep all other body content and anti-patterns unchanged.
+1. Keep the frontmatter `name` and `description`. The `description` field is "pushy" by design (per the [skill-creator authoring guide](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md)) — don't soften it. `when_to_use` is a Claude Code field: fold its trigger phrases into the description if that stays under 1,024 characters, otherwise drop it. Drop `metadata`.
+2. From the body, strip the `TRIGGER: …` prefix sentence in the descriptions of `html-brainstorm-grid`, `html-design-prototypes`, and `html-comparison-matrix`, and the two `AskUserQuestion` anti-pattern bullets in those skills' bodies. That gate is specific to Claude Code's `AskUserQuestion` tool — Claude.ai's chat surface doesn't have it as a competing comparison primitive, so the rule is noise there. Keep everything else in those skills' bodies.
+3. Remove the `## Pre-flight — run BEFORE writing the artifact` section entirely (it invokes a Claude-Code-only skill). Keep the `## HTML output foundation` section unchanged except: drop the final `"Publish to Claude.ai" button` bullet — it drives Claude Code's `Artifact` tool, which doesn't exist in Claude.ai chat. Keep the clipboard-helper bullet; `submit-handler.js` ships with every skill.
+4. Keep all other body content and anti-patterns unchanged. The `<!-- block:… -->` HTML comments are harmless; remove them if you like.
 
 **For the 7 interactive skills only** (`html-mind-map`, `html-throwaway-editor`, `html-brainstorm-grid`, `html-comparison-matrix`, `html-interactive-playground`, `html-design-prototypes`, `html-testing-checklist`):
 
 5. Replace the `## Submit pipeline (server or clipboard)` section with a single shorter section titled `## Submit (clipboard)`. Body should be: *"On submit, JSON copies to the user's clipboard for them to paste back into Claude. There is no server mode in Claude.ai chat — don't reference one. Inline the `submit-handler.js` from `assets/` and call `submitToClaude(payload)` from the single Submit button. Do not set `window.__CLAUDE_SUBMIT_URL__` — leaving it unset is what selects clipboard mode."*
-6. Place `submit-handler.js` (the unmodified file from the repo's `plugins/html-skills/assets/`) into the packaged skill's `assets/` folder. The handler already gracefully falls back to clipboard when `__CLAUDE_SUBMIT_URL__` is unset, so no code change is needed — it Just Works in Claude.ai.
-7. Keep these interactive-skill anti-patterns intact: one Submit button per artifact (no parallel "copy as prompt" buttons), never call `navigator.clipboard.writeText` directly (use `submitToClaude` / `copyToClipboard` for the hardened fallback chain), no inline-rendering inside Claude's chat surface (always write a real `.html` file), no `innerHTML` from variables (XSS / security-hook trip).
-8. Drop interactive-skill anti-patterns that name Claude-Code-only surfaces: anything about `html-skills-listen`, `Monitor`, ephemeral ports.
+6. Keep these interactive-skill rules intact: one Submit button per artifact (no parallel "copy as prompt" buttons), never call `navigator.clipboard.writeText` directly (use `submitToClaude` / `copyToClipboard` for the hardened fallback chain), no inline-rendering inside Claude's chat surface (always write a real `.html` file), no `innerHTML` from variables (XSS / security-hook trip).
+7. Drop any remaining sentence that names Claude-Code-only surfaces: `html-skills-listen`, `html-skills-stop`, `Monitor`, ephemeral ports.
+
+**For all 17:**
+
+8. Place `submit-handler.js` (the unmodified file from the repo's `plugins/html-skills/assets/`) into the packaged skill's `assets/` folder. The handler already falls back to clipboard when `__CLAUDE_SUBMIT_URL__` is unset, so no code change is needed — it Just Works in Claude.ai.
 
 **Drop entirely (don't include in any `.skill` package):**
 
-- `commands/listen.md`, `commands/stop.md` — Claude.ai has no slash commands
-- `channel/server.js`, `.mcp.json` — Claude.ai has no MCP
+- `skills/html-skills-listen/`, `skills/html-skills-stop/` — Claude Code session primitives (bash scripts, the Node receiver, `Monitor`)
+- `assets/blocks/` — authoring templates
 - `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — Claude Code plugin manifests
 
 **Package each skill:**
@@ -111,10 +113,8 @@ Use skill-creator's `scripts/package_skill.py` (or the equivalent zip-the-folder
 html-<kind>/
 ├── SKILL.md          ← converted per rules above
 └── assets/
-    └── submit-handler.js   ← only for the 7 interactive skills
+    └── submit-handler.js
 ```
-
-The non-interactive 10 skills don't need an `assets/` folder.
 
 ## License
 
