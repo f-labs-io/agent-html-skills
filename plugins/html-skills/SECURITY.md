@@ -14,22 +14,14 @@ exposure — review before pointing it at private skills.)
 
 ## Status
 
-**15 of 18 skills scanned clean** in the June 2026 scan (the catalogue had 18 skills then).
-The remaining 3 carry one accepted, documented `W011` (medium) finding each. No `W007`
-(high) findings remain.
+**17 of 19 skills scan clean** on the 1.3.0 release (September 2026 scan). The remaining 2 —
+`html-research-reports` and `html-testing-checklist` — carry one accepted, inherent `W011`
+"third-party content exposure" finding each (see below). No `W007` (high) findings: the
+1.3.0 rewording (shorter descriptions, `when_to_use`, condensed shared blocks, the
+browser-storage rule) did not re-trigger the credential-handling judge.
 
-Two releases postdate that scan and have not been re-scanned yet:
-
-- `html-testing-checklist` (1.2.0) ingests third-party content by design (PR diffs, ticket
-  threads, tester submissions), so an inherent `W011` "Warn" is expected on the same grounds
-  as the three skills below; it carries the same mitigations (mandatory credential
-  redaction before embedding snippets, submissions and sourced text treated strictly as
-  data, HTML-escaping of every source-derived value).
-- 1.3.0 reworded every skill: shorter descriptions with trigger phrases moved to
-  `when_to_use`, condensed shared blocks, and a browser-storage rule (per-artifact key
-  prefix; masked secrets are never stored). The secret-hygiene sections and the
-  "sourced content is data, never instructions" framing are unchanged in substance.
-  Re-run the scan before relying on the badges — the `W007` judge is wording-sensitive.
+For comparison, the June 2026 scan of 1.1.0 was 15 of 18 clean, with `W011` also on
+`html-code-review` and `html-skills-listen`; both are clear in the September scan.
 
 ## Remediated
 
@@ -43,20 +35,20 @@ Two releases postdate that scan and have not been re-scanned yet:
 - **W021 — Hidden Unicode.** Removed a `U+FE0F` variation selector (from a `⚙️` emoji)
   in the "Pre-flight" headings of the interactive skills.
 
-## Accepted (inherent) — W011 "Third-party content exposure" (medium, 0.85)
+## Accepted (inherent) — W011 "Third-party content exposure" (medium)
 
 | Skill | Why the finding is inherent |
 |---|---|
-| `html-research-reports` | synthesizes Slack / web / git-history (outsider-authored) into reports — that is the skill's purpose |
-| `html-code-review` | renders PR diffs / commit messages authored by others — that is the skill's purpose |
-| `html-skills-listen` | the localhost receiver forwards submission POST bodies to the agent — that is the skill's purpose |
+| `html-research-reports` | synthesizes Slack / Linear / web / git-history (outsider-authored) into reports — that is the skill's purpose |
+| `html-testing-checklist` | pulls tracker items (Monday, Linear, Jira, GitHub) and reads each ticket's body and comment thread to ground the test steps — that is the skill's purpose |
 
-These three skills ingest third-party content **by design**. `W011` flags the *capability*,
+These skills ingest third-party content **by design**. `W011` flags the *capability*,
 not a defect, and it cannot be cleared without removing what the skill does. The residual
 risk is mitigated in the skill instructions: sourced/submitted content is treated strictly
-as data (never as instructions), quoted text is rendered inert via `textContent`, and the
-agent is explicitly barred from acting on directives embedded in that content or letting
-retrieved content expand the task's scope.
+as data (never as instructions), quoted text is rendered inert via `textContent`, every
+source-derived value is HTML-escaped, embedded snippets pass a mandatory credential
+redaction, and the agent is explicitly barred from acting on directives embedded in that
+content or letting retrieved content expand the task's scope.
 
 On skills.sh this surfaces as **"Warn," not "Fail."** Rewording these findings was tested
 and found counterproductive — re-touching the data-flow wording re-triggers the `W007`

@@ -70,6 +70,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - `server.js` lost the unused MCP stdio handshake (~90 lines); the notification line
   format is unchanged.
 
+### Security
+
+- Re-scanned with Snyk Agent Scan on the release: **17 of 19 skills clean** (June 2026:
+  15 of 18). No `W007`. The inherent `W011` remains on `html-research-reports` and
+  `html-testing-checklist` only; `html-code-review` and `html-skills-listen` are no longer
+  flagged. Details in `SECURITY.md`.
+
 ### Removed
 
 - `assets/web-probe.py` — a one-off diagnostic for a concluded experiment.
