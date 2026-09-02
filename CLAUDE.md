@@ -51,3 +51,9 @@ wording-sensitive); see `plugins/html-skills/SECURITY.md` and re-scan before tag
 `.github/workflows/version-check.yml` runs on every PR to `main`: a version-bump +
 changelog check, `scripts/sync-skills.py --check`, and `claude plugin validate --strict`
 on the marketplace manifest, the plugin, and the skills directory.
+
+`.github/workflows/snyk-agent-scan.yml` runs Snyk Agent Scan (the skills.sh engine) on PRs
+that touch the skills, on pushes to `main`, weekly, and on demand, using the `SNYK_TOKEN`
+repository secret. `scripts/snyk-gate.py` fails the job on any finding that isn't in its
+`ACCEPTED` list; that list and the "Accepted (inherent)" section of
+`plugins/html-skills/SECURITY.md` must be updated together.

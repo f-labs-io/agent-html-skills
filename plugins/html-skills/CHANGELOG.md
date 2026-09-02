@@ -87,7 +87,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - CI: the `skills-sync` job runs `scripts/sync-skills.py --check` with no pip install,
   and a new `plugin-validate` job runs `claude plugin validate --strict` on the
-  marketplace manifest, the plugin, and the skills directory. `marketplace.json` drops the
+  marketplace manifest, the plugin, and the skills directory. A separate
+  `snyk-agent-scan` workflow runs Snyk Agent Scan on skill changes, pushes to `main`, and
+  weekly; `scripts/snyk-gate.py` fails it on any finding outside the accepted list in
+  `SECURITY.md`. `marketplace.json` drops the
   redundant `metadata.pluginRoot`. `.gitignore` covers `.claude/settings.local.json`.
 
 ## [1.2.1] — 2026-07-07

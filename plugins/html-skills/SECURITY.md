@@ -54,9 +54,19 @@ On skills.sh this surfaces as **"Warn," not "Fail."** Rewording these findings w
 and found counterproductive — re-touching the data-flow wording re-triggers the `W007`
 "verbatim value" judge — so they are accepted as-is.
 
-To make a local/CI scan exit clean while keeping these documented as accepted risk:
+## In CI
+
+`.github/workflows/snyk-agent-scan.yml` runs the scan on every PR that touches the skills,
+on pushes to `main`, weekly, and on demand (`SNYK_TOKEN` repository secret). The raw JSON is
+uploaded as a workflow artifact, and `scripts/snyk-gate.py` fails the job on any finding
+not in its `ACCEPTED` list — which mirrors the table above; change the two together. A
+scan that stops reporting an accepted finding produces a warning, not a failure, so this
+file can be updated.
+
+Locally, the same gate runs as:
 
 ```bash
 SNYK_TOKEN=<your-token> uvx snyk-agent-scan@latest \
-  --skills plugins/html-skills/skills --ignore-issues-codes W011
+  --skills plugins/html-skills/skills --json > snyk-scan.json
+python3 scripts/snyk-gate.py snyk-scan.json
 ```
