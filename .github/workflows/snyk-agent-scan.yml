@@ -32,7 +32,7 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Check for SNYK_TOKEN
         id: token
@@ -46,8 +46,10 @@ jobs:
             echo "present=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v10
         if: steps.token.outputs.present == 'true'
+        with:
+          enable-cache: false   # nothing to cache: uvx with no lockfile
 
       - name: Run Snyk Agent Scan
         if: steps.token.outputs.present == 'true'
@@ -61,7 +63,7 @@ jobs:
 
       - name: Upload raw scan output
         if: steps.token.outputs.present == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: snyk-agent-scan
           path: |
