@@ -46,7 +46,7 @@ jobs:
             echo "present=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.0.1
         if: steps.token.outputs.present == 'true'
         with:
           enable-cache: false   # nothing to cache: uvx with no lockfile
