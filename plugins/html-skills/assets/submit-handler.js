@@ -10,6 +10,9 @@
 //                           its localhost is reachable from the user's
 //                           browser (local Claude Code).
 //       2. Clipboard mode — default. submit copies JSON; user pastes back.
+//     If server mode was configured but the POST fails (listener died, port
+//     changed, 403), the handler falls back to clipboard AND says so in the
+//     toast, so a dead listener is visible instead of silent.
 //
 //   copyToClipboard(text, opts) — generic clipboard helper. Use this for
 //     ANY clipboard write in an artifact (e.g. a "copy CSS" or "copy URL"
@@ -33,9 +36,16 @@
 // contexts. Both paths normally hit the clipboard silently. As an absolute
 // last resort — both methods failed — a small non-blocking banner pinned to
 // the bottom shows the JSON in a pre-selected textarea with a one-line
-// "Cmd+A, Cmd+C, paste back into Claude" instruction. No modal, ever.
+// "select all, copy, paste back into Claude" instruction. No modal, ever.
 //
-// Payload envelope (both modes carry the same JSON):
+// Optional message overrides (window globals or opts):
+//   __CLAUDE_SERVER_MESSAGE__ / opts.serverMessage       — after a successful POST
+//   __CLAUDE_CLIPBOARD_MESSAGE__ / opts.clipboardMessage — plain clipboard mode
+//   __CLAUDE_FALLBACK_MESSAGE__ / opts.fallbackMessage   — server mode failed, copied instead
+//
+// Payload envelope (both modes carry the same JSON; pretty-printed on the
+// clipboard, compact on the wire since the receiver relays it into a
+// one-line notification):
 //   { skill: "html-<name>", kind: "<artifact-kind>", data: <...>, version: 1 }
 
 (function () {
@@ -72,6 +82,10 @@
     return { json: json, count: count };
   }
 
+  function compact(json) {
+    try { return JSON.stringify(JSON.parse(json)); } catch (e) { return json; }
+  }
+
   async function submitToClaude(payload, opts) {
     opts = opts || {};
     let json = JSON.stringify(payload, null, 2);
@@ -87,13 +101,14 @@
     }
 
     const url = opts.url || window.__CLAUDE_SUBMIT_URL__;
+    let serverFailure = '';
 
     if (url) {
       try {
         const r = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: json,
+          body: compact(json),
         });
         if (r.ok) {
           notify(opts, (opts.serverMessage
@@ -101,18 +116,26 @@
             || 'Submitted to Claude.') + note);
           return 'server';
         }
+        serverFailure = 'HTTP ' + r.status;
       } catch (e) {
-        // Fall through to clipboard.
+        serverFailure = 'unreachable';
       }
     }
-    return clipboardSubmit(json, opts, note);
+    return clipboardSubmit(json, opts, note, serverFailure);
   }
 
-  async function clipboardSubmit(json, opts, note) {
-    const msg = (opts.clipboardMessage
-      || window.__CLAUDE_CLIPBOARD_MESSAGE__
-      || 'Copied to clipboard — paste back into Claude.') + (note || '');
-    return copyToClipboard(json, { ...opts, message: msg, returnTag: 'clipboard' });
+  async function clipboardSubmit(json, opts, note, serverFailure) {
+    let msg;
+    if (serverFailure) {
+      msg = opts.fallbackMessage
+        || window.__CLAUDE_FALLBACK_MESSAGE__
+        || ("Claude's listener didn't answer (" + serverFailure + ") — copied to clipboard instead. Paste it into Claude.");
+    } else {
+      msg = opts.clipboardMessage
+        || window.__CLAUDE_CLIPBOARD_MESSAGE__
+        || 'Copied to clipboard — paste back into Claude.';
+    }
+    return copyToClipboard(json, { ...opts, message: msg + (note || ''), returnTag: 'clipboard' });
   }
 
   // Standalone clipboard helper, exposed on window. Use this for ANY
@@ -197,7 +220,10 @@
 
     const main = document.createElement('div');
     const msg = document.createElement('div');
-    msg.textContent = 'Auto-copy unavailable here. Press ⌘A then ⌘C in the box, then paste into Claude.';
+    const isApple = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || '');
+    msg.textContent = 'Auto-copy unavailable here. Press '
+      + (isApple ? '⌘A then ⌘C' : 'Ctrl+A then Ctrl+C')
+      + ' in the box, then paste into Claude.';
     msg.style.marginBottom = '6px';
     main.appendChild(msg);
 

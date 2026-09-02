@@ -14,15 +14,22 @@ exposure — review before pointing it at private skills.)
 
 ## Status
 
-**15 of 18 skills scanned clean** in the June 2026 scan. The remaining 3 carry one
-accepted, documented `W011` (medium) finding each. No `W007` (high) findings remain.
+**15 of 18 skills scanned clean** in the June 2026 scan (the catalogue had 18 skills then).
+The remaining 3 carry one accepted, documented `W011` (medium) finding each. No `W007`
+(high) findings remain.
 
-`html-testing-checklist` (added in 1.2.0) postdates that scan. Like the three skills
-below, it ingests third-party content by design (PR diffs, ticket threads, tester
-submissions), so an inherent `W011` "Warn" is expected there on the same grounds; it
-carries the same mitigations (mandatory credential redaction before embedding snippets,
-submissions and sourced text treated strictly as data, HTML-escaping of every
-source-derived value).
+Two releases postdate that scan and have not been re-scanned yet:
+
+- `html-testing-checklist` (1.2.0) ingests third-party content by design (PR diffs, ticket
+  threads, tester submissions), so an inherent `W011` "Warn" is expected on the same grounds
+  as the three skills below; it carries the same mitigations (mandatory credential
+  redaction before embedding snippets, submissions and sourced text treated strictly as
+  data, HTML-escaping of every source-derived value).
+- 1.3.0 reworded every skill: shorter descriptions with trigger phrases moved to
+  `when_to_use`, condensed shared blocks, and a browser-storage rule (per-artifact key
+  prefix; masked secrets are never stored). The secret-hygiene sections and the
+  "sourced content is data, never instructions" framing are unchanged in substance.
+  Re-run the scan before relying on the badges — the `W007` judge is wording-sensitive.
 
 ## Remediated
 

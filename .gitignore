@@ -8,3 +8,6 @@ node_modules/
 
 # OS
 .DS_Store
+
+# Claude Code local settings (per-user skill overrides etc.)
+.claude/settings.local.json

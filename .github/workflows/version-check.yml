@@ -1,18 +1,23 @@
 name: version-check
 
-# Enforces the rule in CLAUDE.md: any change under plugins/html-skills/ must bump the
-# plugin version and update the changelog. Always runs (so it can be a required check);
-# only *enforces* when versionable plugin files changed.
+# Enforces the rules in CLAUDE.md: any change under plugins/html-skills/ must bump the
+# plugin version and update the changelog, every SKILL.md must carry that version and the
+# shared blocks verbatim, and the manifests must validate. Always runs (so it can be a
+# required check); the version-bump job only *enforces* when versionable files changed.
 #
-# The version-bump job does no repo checkout — it reads the PR's changed files and the
-# two plugin.json versions via the GitHub API, so it finishes in ~1s.
+# version-bump does no repo checkout — it reads the PR's changed files and the two
+# plugin.json versions via the GitHub API, so it finishes in ~1s.
 #
-# The skill-versions job checks out the PR head and runs
-# scripts/sync-skill-versions.py --check: every SKILL.md must carry a frontmatter
-# metadata.version equal to plugin.json's version (ecosystem sites read individual
-# skills, so per-skill versions must never drift from the release version), with valid
-# YAML frontmatter and descriptions under the 1024-char limit. Fix drift locally with:
-#   python3 scripts/sync-skill-versions.py --write
+# skills-sync checks out the PR head and runs scripts/sync-skills.py --check (no
+# third-party dependencies): every SKILL.md must carry a frontmatter metadata.version
+# equal to plugin.json's version, a name matching its directory, a description within the
+# skills.sh limit (1024) and, with when_to_use, within Claude Code's listing limit (1536),
+# and the shared blocks (pre-flight, foundation, submit) must match their templates in
+# plugins/html-skills/assets/blocks/. Fix drift locally with:
+#   python3 scripts/sync-skills.py --write
+#
+# plugin-validate runs Claude Code's own validator in strict mode on the marketplace
+# manifest, the plugin manifest, and the skills directory.
 
 on:
   pull_request:
@@ -69,11 +74,24 @@ jobs:
           fi
           echo "OK: version ${base_ver} -> ${head_ver} with a changelog update."
 
-  skill-versions:
+  skills-sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install PyYAML
-        run: python3 -m pip install --quiet pyyaml
-      - name: Every SKILL.md metadata.version must match plugin.json
-        run: python3 scripts/sync-skill-versions.py --check
+      - name: Every SKILL.md carries the plugin version and the shared blocks match their templates
+        run: python3 scripts/sync-skills.py --check
+
+  plugin-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: claude plugin validate --strict (marketplace, plugin, skills)
+        run: |
+          claude plugin validate --strict .
+          claude plugin validate --strict plugins/html-skills
+          claude plugin validate --strict plugins/html-skills/skills

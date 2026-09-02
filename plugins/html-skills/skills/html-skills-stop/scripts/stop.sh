@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # html-skills-stop — kills this session's html-skills receiver and cleans up
-# its temp files. The Monitor task ID lives in /tmp/html-skills-$SID.monitor-id
-# and must be stopped by the agent via TaskStop, since Monitor is a
-# Claude Code tool, not a shell concept — the script prints the ID and the
-# parent SKILL.md does the TaskStop call.
+# its temp files. The Monitor task id lives in /tmp/html-skills-$SID.monitor-id
+# and must be stopped by the agent via TaskStop (Monitor is a Claude Code tool,
+# not a shell concept): this script prints the id, the SKILL.md does the call.
+#
+# Usage: stop.sh [session-id]
+#   Falls back to $CLAUDE_CODE_SESSION_ID, then "no-session" — same as listen.sh.
 #
 # Output: KEY=VALUE lines.
 #   STATUS=WEB         — nothing was running here; web session.
@@ -13,7 +15,7 @@
 
 set -u
 
-SID="${CLAUDE_CODE_SESSION_ID:-no-session}"
+SID="${1:-${CLAUDE_CODE_SESSION_ID:-no-session}}"
 PIDF=/tmp/html-skills-$SID.pid
 LOGF=/tmp/html-skills-$SID.log
 URLF=/tmp/html-skills-$SID.url
@@ -31,16 +33,14 @@ if [ ! -f "$PIDF" ]; then
   exit 0
 fi
 
-# Print the Monitor task ID first (parent SKILL.md will TaskStop it).
+# Print the Monitor task id first (parent SKILL.md will TaskStop it).
 if [ -s "$MIDF" ]; then
   echo "MONITOR_ID=$(cat "$MIDF")"
 fi
 
-# Kill the receiver.
 PID=$(cat "$PIDF")
 kill "$PID" 2>/dev/null || true
 
-# Clean up files.
 rm -f "$PIDF" "$LOGF" "$URLF" "$MIDF"
 
 echo "STATUS=STOPPED"
