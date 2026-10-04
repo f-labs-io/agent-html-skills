@@ -8,7 +8,7 @@ description: >-
   conversation touches database structure with more than ~3 tables.
 license: MIT
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # HTML ERD & Schema Explorer
@@ -136,6 +136,7 @@ Output: HTML file with six table cards laid out by domain (users in one group, p
 These defaults apply to every artifact this skill produces. A rule above wins on conflict; otherwise they are non-negotiable.
 
 - **Write a real `.html` file to disk** (`<topic>-<kind>.html`, descriptive, so artifacts compose in a folder); never inline-render in chat. Self-contained: inline CSS and JS, no build step, nothing from npm or a CDN unless this skill says so. Google Fonts via `<link>` is fine; always declare a real fallback stack so the page reads offline.
+- **Complete document shell, never a fragment**: start with `<!doctype html>`, `<html lang="…">`, and a `<head>` whose first child is `<meta charset="utf-8">`, followed by `<meta name="viewport" content="width=device-width, initial-scale=1">` and the `<title>`. Hosts that embed the page (iframes, note apps) often tolerate a missing charset, but the same file opened via `file://` or sent elsewhere makes the browser guess, and every em dash, `×`, accent, or emoji turns into mojibake.
 - **Mobile-responsive**: collapse to a single column under ~700px.
 - **Browser storage is for in-progress state only.** `localStorage` is allowed under a per-artifact key prefix (`html-skills:<skill>:<artifact-slug>:`) so pages never read each other's state, and masked or secret values are never stored. Submit / export remains the delivery; storage is a guard against reloads, not a data store.
 - **Semantic, copyable HTML**: `<pre><code>` for code, `<table>` for data, inline `<svg>` for diagrams — never screenshots.
