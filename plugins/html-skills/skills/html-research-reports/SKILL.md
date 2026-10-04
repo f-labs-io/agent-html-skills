@@ -13,7 +13,7 @@ when_to_use: >-
   not implementation.
 license: MIT
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # HTML Research, Reports & Learning
@@ -134,6 +134,7 @@ Output: HTML file with a token-bucket SVG flow diagram up top, four annotated co
 These defaults apply to every artifact this skill produces. A rule above wins on conflict; otherwise they are non-negotiable.
 
 - **Write a real `.html` file to disk** (`<topic>-<kind>.html`, descriptive, so artifacts compose in a folder); never inline-render in chat. Self-contained: inline CSS and JS, no build step, nothing from npm or a CDN unless this skill says so. Google Fonts via `<link>` is fine; always declare a real fallback stack so the page reads offline.
+- **Complete document shell, never a fragment**: `<!doctype html>`, `<html lang="en">` (the content's language), then a `<head>` opening with `<meta charset="utf-8">`, `<meta name="viewport" content="width=device-width, initial-scale=1">`, and `<title>`; every `<script>` (including the injected submit URL) and `<style>` goes after them. Without the charset, `file://` opens render non-ASCII text as mojibake.
 - **Mobile-responsive**: collapse to a single column under ~700px.
 - **Browser storage is for in-progress state only.** `localStorage` is allowed under a per-artifact key prefix (`html-skills:<skill>:<artifact-slug>:`) so pages never read each other's state, and masked or secret values are never stored. Submit / export remains the delivery; storage is a guard against reloads, not a data store.
 - **Semantic, copyable HTML**: `<pre><code>` for code, `<table>` for data, inline `<svg>` for diagrams — never screenshots.

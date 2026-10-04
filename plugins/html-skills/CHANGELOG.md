@@ -3,6 +3,17 @@
 All notable changes to the `html-skills` plugin are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.4.0] — 2026-10-04
+
+### Fixed
+
+- **Artifacts always declare their encoding.** The shared HTML output foundation now
+  requires a complete document shell — `<!doctype html>`, `<html lang>`, and a `<head>`
+  opening with `<meta charset="utf-8">` plus the viewport meta — instead of leaving it to
+  model judgment. A generated page that started at `<title>` rendered fine embedded in a
+  host iframe but showed mojibake for every em dash, `×`, accent, and emoji when opened
+  via `file://` ([#8](https://github.com/f-labs-io/agent-html-skills/issues/8)).
+
 ## [1.3.0] — 2026-09-02
 
 ### Fixed

@@ -8,7 +8,7 @@ description: >-
   user mentions cleanup. Safe to invoke when nothing is active — it reports inactive and exits.
 license: MIT
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # html-skills-stop — tear down server mode
